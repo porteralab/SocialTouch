@@ -1190,7 +1190,7 @@ subplot(5,2,7);shadedErrorBar(-2:0.05:7,nanmean(RSnewALLS1WTVOLSOCZ(find(newWTS1
 subplot(5,2,9);shadedErrorBar(-2:0.05:7,nanmean(RSnewALLS1WTVOLSOCZ(find(newWTS1socidx==5),:)),nanstd(RSnewALLS1WTVOLSOCZ(find(newWTS1socidx==5),:))/(sqrt(size(RSnewALLS1WTVOLSOCZ(find(newWTS1socidx==5),:),1)))); xlim([-2 6.95]);
 
 
-%%
+
 RSS1cellsobj = find(allvolobjS1widths>= 400);
 
 WTS1cellsobj = find(groupS1volALL == "WT");
