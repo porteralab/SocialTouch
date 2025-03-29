@@ -1,5 +1,5 @@
 For behavioral analysis:
-Code is available to analyze individual avoidance behaviors and AFEs as well as DeepLabCut XY coordinates. 
+Code is available to analyze individual avoidance behaviors and AFEs as well as DeepLabCut XY coordinates. Use raw.avi or .mp4 files for video analysis and the excel files generated from DeepLabCut for DLC pose estimation analysis.
 
 For ephys analysis:
 Raw data after spike-sorting in Kilosort and manual curation sho8uld be first go through extracting spike times and other spike relevant info. This is done using the code in ExtractNeuralData folder. Once you have the .mat files generated,
