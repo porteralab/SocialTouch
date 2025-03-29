@@ -255,31 +255,31 @@ stim(121:160) = "forcmo";
 
 %%
 
-stimonsets2 = stimonsets(81:160);
-trialspks = {};
-
-wpre = 2; 
-wpost = 7; 
-
-for c = 1:length(newspks)
-    sp = newspks{c};
-    tmp = {};
-    for itrial = 1:80
-        o = stimonsets2(itrial);
-        tmp{itrial} = (double(sp((sp>=o-wpre) & (sp<o+wpost)))-o);
-    end
-    trialspks{c} = tmp;
-end
-
-% Save plots of spike rasters for each cluster for first condition
-for c = 171
-    fig = figure(104);
-    clf
-    plotRastergram(trialspks{c});hold all
-    plot([0,0],[0,80],'--r')
-    plot([5,5],[0,80],'--r')
-    axis([-2,7,0,80])
-end
+% stimonsets2 = stimonsets(81:160);
+% trialspks = {};
+% 
+% wpre = 2; 
+% wpost = 7; 
+% 
+% for c = 1:length(newspks)
+%     sp = newspks{c};
+%     tmp = {};
+%     for itrial = 1:80
+%         o = stimonsets2(itrial);
+%         tmp{itrial} = (double(sp((sp>=o-wpre) & (sp<o+wpost)))-o);
+%     end
+%     trialspks{c} = tmp;
+% end
+% 
+% % Save plots of spike rasters for each cluster for first condition
+% for c = 171
+%     fig = figure(104);
+%     clf
+%     plotRastergram(trialspks{c});hold all
+%     plot([0,0],[0,80],'--r')
+%     plot([5,5],[0,80],'--r')
+%     axis([-2,7,0,80])
+% end
 %%
 % depthspks = {};
 % 
@@ -1679,7 +1679,7 @@ end
 
 
     %%
-    FiringFileName = strcat(apbin1, "allFiringProperties", "WHOLETRACESHUFFLE", "AUCREDO", "FORCNEW", "ADDSUPP", "NEWMODIDX", ".mat");
+    FiringFileName = strcat(apbin1, "allFiringPropertiesWHOLETRACESHUFFLEAUCREDOADDSUPPNEWMODIDXBASEFIRE", ".mat");
 
 load(FiringFileName, "allFiringProperties")
 
@@ -2261,19 +2261,19 @@ allFiringProperties.AverageFiringDiff.BLAAVGBASEFORCMO = bspAVGBASEFORCMO(blagoo
 % % % % %
 % % % % %
 % % % %% Get all stims for S1, STR and BLA
-% % % 
-% % for a = 1:length(S1good)
-% %     S1allstims{a} = bspallaltstims{S1good(a)};
-% % end
-% % 
-% % for a = 1:length(strgood)
-% %     STRallstims{a} = bspallaltstims{strgood(a)};
-% % end
-% % 
-% % for a = 1:length(blagood)
-% %     BLAallstims{a} = bspallaltstims{blagood(a)};
-% % end
-% % % 
+% 
+for a = 1:length(S1good)
+    S1allstims{a} = bspallaltstims{S1good(a)};
+end
+
+for a = 1:length(strgood)
+    STRallstims{a} = bspallaltstims{strgood(a)};
+end
+
+for a = 1:length(blagood)
+    BLAallstims{a} = bspallaltstims{blagood(a)};
+end
+% 
 % % % 
 % % % % get bsp by trial binned data for SVM Decoder
 % % % 
@@ -2672,7 +2672,105 @@ allFiringProperties.AverageFiringDiff.BLAAVGBASEFORCMO = bspAVGBASEFORCMO(blagoo
 % allFiringProperties.allspontfiring = bspspontavg1st;
 % allFiringProperties.stimonsets = stimonsets;
 % allFiringProperties.stimtype = ["VolObj","VolMo","ForcObj","ForcMo"];
-FiringFileName = strcat(apbin1, "allFiringProperties", "WHOLETRACESHUFFLE", "AUCREDO", "ADDSUPP", "NEWMODIDX", "BASEFIRE", ".mat");
+
+
+%% SPECIFY GETTING THE DIFFERENT AUC VALUES
+timerangeSTIM = (1.75/0.05):(7/0.05);
+timerangeSHORTSTIM = (1/0.05):(5/0.05);
+timerangePLATFORMfr = (1/0.05):(3/0.05);
+timerangePLATFORMls = (6/0.05):(8/0.05);
+
+nostim = 0;
+yesstim = 1;
+[S1AUCVolObjvsSocF20STIM, S1AUCVolObjvsSocF20STIMSh, S1p1allSTIM, S1p2allSTIM] = getAUCPREFVOLF20(timerangeSTIM,[],S1allstims, nostim);
+[S1AUCVolObjvsSocF20SHORTSTIM,S1AUCVolObjvsSocF20SHORTSTIMSh, S1p1allSHORTSTIM, S1p2allSHORTSTIM] = getAUCPREFVOLF20(timerangeSHORTSTIM,[],S1allstims, nostim);
+[S1AUCVolObjvsSocF20PLATFORM, S1AUCVolObjvsSocF20PLATFORMSh S1p1allPLATFORM, S1p2allPLATFORM] = getAUCPREFVOLF20(timerangePLATFORMfr,timerangePLATFORMls,S1allstims, yesstim);
+
+
+[STRAUCVolObjvsSocSTIM,STRAUCVolObjvsSocSTIMSh, STRp1allSTIM, STRp2allSTIM] = getAUCPREFVOLF20(timerangeSTIM,[],STRallstims, nostim);
+[STRAUCVolObjvsSocSHORTSTIM,STRAUCVolObjvsSocSHORTSTIMSh,STRp1allSHORTSTIM, STRp2allSHORTSTIM] = getAUCPREFVOLF20(timerangeSHORTSTIM,[],STRallstims, nostim);
+[STRAUCVolObjvsSocPLATFORM,STRAUCVolObjvsSocPLATFORMSh, STRp1allPLATFORM, STRp2allPLATFORM] = getAUCPREFVOLF20(timerangePLATFORMfr,timerangePLATFORMls,STRallstims, yesstim);
+
+[BLAAUCVolObjvsSocSTIM,BLAAUCVolObjvsSocSTIMSh, BLAp1allSTIM, BLAp2allSTIM] = getAUCPREFVOLF20(timerangeSTIM,[],BLAallstims, nostim);
+[BLAAUCVolObjvsSocSHORTSTIM,BLAAUCVolObjvsSocSHORTSTIMSh, BLAp1allSHORTSTIM, BLAp2allSHORTSTIM] = getAUCPREFVOLF20(timerangeSHORTSTIM,[],BLAallstims, nostim);
+[BLAAUCVolObjvsSocPLATFORM,BLAAUCVolObjvsSocPLATFORMSh, BLAp1allPLATFORM, BLAp2allPLATFORM] = getAUCPREFVOLF20(timerangePLATFORMfr,timerangePLATFORMls,BLAallstims, yesstim);
+
+%
+%Save ROC for allFiringProperties
+
+allFiringProperties.AUCPrefTIMEv20.S1AUC.S1AUCVolSTIM = S1AUCVolObjvsSocF20STIM;
+allFiringProperties.AUCPrefTIMEv20.S1AUC.S1AUCVolSHORTSTIM = S1AUCVolObjvsSocF20SHORTSTIM;
+allFiringProperties.AUCPrefTIMEv20.S1AUC.S1AUCVolPLATFORM = S1AUCVolObjvsSocF20PLATFORM;
+
+allFiringProperties.AUCPrefTIMEv20.STRAUC.STRAUCVolSTIM = STRAUCVolObjvsSocSTIM;
+allFiringProperties.AUCPrefTIMEv20.STRAUC.STRAUCVolSHORTSTIM = STRAUCVolObjvsSocSHORTSTIM;
+allFiringProperties.AUCPrefTIMEv20.STRAUC.STRAUCVolPLATFORM = STRAUCVolObjvsSocPLATFORM;
+
+allFiringProperties.AUCPrefTIMEv20.BLAAUC.BLAAUCVolSTIM = BLAAUCVolObjvsSocSTIM;
+allFiringProperties.AUCPrefTIMEv20.BLAAUC.BLAAUCVolSHORTSTIM = BLAAUCVolObjvsSocSHORTSTIM;
+allFiringProperties.AUCPrefTIMEv20.BLAAUC.BLAAUCVolPLATFORM = BLAAUCVolObjvsSocPLATFORM;
+
+allFiringProperties.AUCPrefTIMEv20.S1AUC.S1AUCVolSTIMSh = S1AUCVolObjvsSocF20STIMSh;
+allFiringProperties.AUCPrefTIMEv20.S1AUC.S1AUCVolSHORTSTIMSh = S1AUCVolObjvsSocF20SHORTSTIMSh;
+allFiringProperties.AUCPrefTIMEv20.S1AUC.S1AUCVolPLATFORMSh = S1AUCVolObjvsSocF20PLATFORMSh;
+
+allFiringProperties.AUCPrefTIMEv20.STRAUC.STRAUCVolSTIMSh = STRAUCVolObjvsSocSTIMSh;
+allFiringProperties.AUCPrefTIMEv20.STRAUC.STRAUCVolSHORTSTIMSh = STRAUCVolObjvsSocSHORTSTIMSh;
+allFiringProperties.AUCPrefTIMEv20.STRAUC.STRAUCVolPLATFORMSh = STRAUCVolObjvsSocPLATFORMSh;
+
+allFiringProperties.AUCPrefTIMEv20.BLAAUC.BLAAUCVolSTIMSh = BLAAUCVolObjvsSocSTIMSh;
+allFiringProperties.AUCPrefTIMEv20.BLAAUC.BLAAUCVolSHORTSTIMSh = BLAAUCVolObjvsSocSHORTSTIMSh;
+allFiringProperties.AUCPrefTIMEv20.BLAAUC.BLAAUCVolPLATFORMSh = BLAAUCVolObjvsSocPLATFORMSh;
+
+%% SPECIFY GETTING THE DIFFERENT AUC VALUES
+timerangeSTIM = (1.75/0.05):(7/0.05);
+timerangeSHORTSTIM = (1/0.05):(5/0.05);
+timerangePLATFORMfr = (1/0.05):(3/0.05);
+timerangePLATFORMls = (6/0.05):(8/0.05);
+
+nostim = 0;
+yesstim = 1;
+[S1AUCVolObjvsSocL20STIM, S1AUCVolObjvsSocL20STIMSh, S1p1allSTIM, S1p2allSTIM] = getAUCPREFVOLL20(timerangeSTIM,[],S1allstims, nostim);
+[S1AUCVolObjvsSocL20SHORTSTIM,S1AUCVolObjvsSocL20SHORTSTIMSh, S1p1allSHORTSTIM, S1p2allSHORTSTIM] = getAUCPREFVOLL20(timerangeSHORTSTIM,[],S1allstims, nostim);
+[S1AUCVolObjvsSocL20PLATFORM, S1AUCVolObjvsSocL20PLATFORMSh S1p1allPLATFORM, S1p2allPLATFORM] = getAUCPREFVOLL20(timerangePLATFORMfr,timerangePLATFORMls,S1allstims, yesstim);
+
+
+[STRAUCVolObjvsSocSTIM,STRAUCVolObjvsSocSTIMSh, STRp1allSTIM, STRp2allSTIM] = getAUCPREFVOLL20(timerangeSTIM,[],STRallstims, nostim);
+[STRAUCVolObjvsSocSHORTSTIM,STRAUCVolObjvsSocSHORTSTIMSh,STRp1allSHORTSTIM, STRp2allSHORTSTIM] = getAUCPREFVOLL20(timerangeSHORTSTIM,[],STRallstims, nostim);
+[STRAUCVolObjvsSocPLATFORM,STRAUCVolObjvsSocPLATFORMSh, STRp1allPLATFORM, STRp2allPLATFORM] = getAUCPREFVOLL20(timerangePLATFORMfr,timerangePLATFORMls,STRallstims, yesstim);
+
+[BLAAUCVolObjvsSocSTIM,BLAAUCVolObjvsSocSTIMSh, BLAp1allSTIM, BLAp2allSTIM] = getAUCPREFVOLL20(timerangeSTIM,[],BLAallstims, nostim);
+[BLAAUCVolObjvsSocSHORTSTIM,BLAAUCVolObjvsSocSHORTSTIMSh, BLAp1allSHORTSTIM, BLAp2allSHORTSTIM] = getAUCPREFVOLL20(timerangeSHORTSTIM,[],BLAallstims, nostim);
+[BLAAUCVolObjvsSocPLATFORM,BLAAUCVolObjvsSocPLATFORMSh, BLAp1allPLATFORM, BLAp2allPLATFORM] = getAUCPREFVOLL20(timerangePLATFORMfr,timerangePLATFORMls,BLAallstims, yesstim);
+
+%
+%Save ROC for allFiringProperties
+
+allFiringProperties.AUCPrefTIMEv20.S1AUC.S1AUCVolSTIM = S1AUCVolObjvsSocL20STIM;
+allFiringProperties.AUCPrefTIMEv20.S1AUC.S1AUCVolSHORTSTIM = S1AUCVolObjvsSocL20SHORTSTIM;
+allFiringProperties.AUCPrefTIMEv20.S1AUC.S1AUCVolPLATFORM = S1AUCVolObjvsSocL20PLATFORM;
+
+allFiringProperties.AUCPrefTIMEv20.STRAUC.STRAUCVolSTIM = STRAUCVolObjvsSocSTIM;
+allFiringProperties.AUCPrefTIMEv20.STRAUC.STRAUCVolSHORTSTIM = STRAUCVolObjvsSocSHORTSTIM;
+allFiringProperties.AUCPrefTIMEv20.STRAUC.STRAUCVolPLATFORM = STRAUCVolObjvsSocPLATFORM;
+
+allFiringProperties.AUCPrefTIMEv20.BLAAUC.BLAAUCVolSTIM = BLAAUCVolObjvsSocSTIM;
+allFiringProperties.AUCPrefTIMEv20.BLAAUC.BLAAUCVolSHORTSTIM = BLAAUCVolObjvsSocSHORTSTIM;
+allFiringProperties.AUCPrefTIMEv20.BLAAUC.BLAAUCVolPLATFORM = BLAAUCVolObjvsSocPLATFORM;
+
+allFiringProperties.AUCPrefTIMEv20.S1AUC.S1AUCVolSTIMSh = S1AUCVolObjvsSocL20STIMSh;
+allFiringProperties.AUCPrefTIMEv20.S1AUC.S1AUCVolSHORTSTIMSh = S1AUCVolObjvsSocL20SHORTSTIMSh;
+allFiringProperties.AUCPrefTIMEv20.S1AUC.S1AUCVolPLATFORMSh = S1AUCVolObjvsSocL20PLATFORMSh;
+
+allFiringProperties.AUCPrefTIMEv20.STRAUC.STRAUCVolSTIMSh = STRAUCVolObjvsSocSTIMSh;
+allFiringProperties.AUCPrefTIMEv20.STRAUC.STRAUCVolSHORTSTIMSh = STRAUCVolObjvsSocSHORTSTIMSh;
+allFiringProperties.AUCPrefTIMEv20.STRAUC.STRAUCVolPLATFORMSh = STRAUCVolObjvsSocPLATFORMSh;
+
+allFiringProperties.AUCPrefTIMEv20.BLAAUC.BLAAUCVolSTIMSh = BLAAUCVolObjvsSocSTIMSh;
+allFiringProperties.AUCPrefTIMEv20.BLAAUC.BLAAUCVolSHORTSTIMSh = BLAAUCVolObjvsSocSHORTSTIMSh;
+allFiringProperties.AUCPrefTIMEv20.BLAAUC.BLAAUCVolPLATFORMSh = BLAAUCVolObjvsSocPLATFORMSh;
+
+FiringFileName = strcat(apbin1, "allFiringProperties", "WHOLETRACESHUFFLE", "AUCREDO", "ADDSUPP", "NEWMODIDX", "BASEFIRE", "20COMP", ".mat");
 
 save(FiringFileName, "allFiringProperties")
 
